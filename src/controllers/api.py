@@ -2,7 +2,7 @@ from fastapi import APIRouter, Depends
 from dependency_injector.wiring import inject, Provide
 
 from ..configs.containers import Container
-from ..services.sample_service import SampleService
+from ..services.redis_service import RedisService
 
 import logging
 logger = logging.getLogger(__name__)
@@ -12,9 +12,11 @@ api_router = APIRouter(
 )
 
 
-@api_router.get('/sample_endpoint')
+@api_router.get('/lock')
 @inject
 def sample(
-        sample_service: SampleService = Depends(Provide[Container.sample_service])
+        key: str,
+        key_expiry: int,
+        redis_service: RedisService = Depends(Provide[Container.redis_service])
 ):
-    return sample_service.sample_method()
+    return redis_service.get_lock(key, key_expiry)
