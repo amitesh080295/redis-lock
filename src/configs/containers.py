@@ -1,9 +1,10 @@
 from dependency_injector import containers, providers
 from environs import Env
 
-from ..services.sample_service import SampleService
+from ..services.redis_service import RedisService
 from ..security.authenticator import AuthenticationHandler
 from ..configs.config_client import PythonConfigClient
+from ..configs.redis_datasource import RedisDatasource
 
 
 class Container(containers.DeclarativeContainer):
@@ -24,6 +25,11 @@ class Container(containers.DeclarativeContainer):
         env=env
     )
 
-    sample_service = providers.Singleton(
-        SampleService
+    redis_datasource = providers.Singleton(
+        RedisDatasource
+    )
+
+    redis_service = providers.Singleton(
+        RedisService,
+        redis_datasource=redis_datasource
     )
