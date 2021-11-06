@@ -14,9 +14,18 @@ api_router = APIRouter(
 
 @api_router.get('/lock')
 @inject
-def sample(
+def lock(
         key: str,
         key_expiry: int,
         redis_service: RedisService = Depends(Provide[Container.redis_service])
 ):
     return redis_service.get_lock(key, key_expiry)
+
+
+@api_router.get('/unlock')
+@inject
+def unlock(
+        key: str,
+        redis_service: RedisService = Depends(Provide[Container.redis_service])
+):
+    return redis_service.remove_lock(key)

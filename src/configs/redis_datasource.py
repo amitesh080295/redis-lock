@@ -22,3 +22,6 @@ class RedisDatasource:
 
     def set_key(self, key: str, key_expiry: int):
         return self.redis_connection.set(key, 'DUMMY', ex=key_expiry, nx=True)
+
+    def delete_key(self, key: str):
+        return self.redis_connection.delete(key)

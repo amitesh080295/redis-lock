@@ -18,3 +18,12 @@ class RedisService:
 
         logger.info(f'{key} is duplicate')
         return dict(status=406, message=f'{key} is duplicate')
+
+    def remove_lock(self, key: str):
+        redis_response = self.redis_datasource.delete_key(key)
+        if redis_response:
+            logger.info(f'{key} is removed')
+            return dict(status=202, message=f'{key} is removed')
+
+        logger.info(f'{key} didn\'t exist')
+        return dict(status=404, message=f'{key} didn\'t exist')
