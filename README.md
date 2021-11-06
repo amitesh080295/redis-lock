@@ -1,5 +1,5 @@
 # redis-lock
-Redis Based API for acquiring lock on a value for a specified amount of time.
+Redis Based API for acquiring and releasing lock on a value for a specified amount of time.
 
 # Running Locally
 **Prerequisites**
@@ -39,5 +39,29 @@ If you make the second request within the key expiration window, in this case 5 
 {
     "status": 406,
     "message": "12345 is duplicate"
+}
+```
+
+To manually remove the lock, use the following cURL command
+
+```
+curl --location --request GET 'http://127.0.0.1:8000/api/v1/unlock?key=12345'
+```
+
+Upon successfully removing a key from Redis, you will get the following response
+
+```
+{
+    "status": 202,
+    "message": "12345 is removed"
+}
+```
+
+If the key is not present in Redis, you will get the following response
+
+```
+{
+    "status": 404,
+    "message": "12345 didn't exist"
 }
 ```
